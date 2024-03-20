@@ -1,5 +1,5 @@
 from django import forms
-from pybo.models import Question, Answer
+from pybo.models import Question, Answer, Comment
 
 #이런 형태를 장고 폼이라고 한다.
 #forms.Form을 상속받으면 폼, forms.ModelForm을 상속받으면 모델 폼
@@ -30,4 +30,12 @@ class AnswerForm(forms.ModelForm):
         fields = ['content']
         labels = {
             'content' : '답변내용',
+        }
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['content']
+        labels = {
+            'content' : '댓글내용',
         }
