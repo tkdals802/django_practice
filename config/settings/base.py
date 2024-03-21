@@ -128,62 +128,65 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
 LOGGING = {
-    'version' : 1,
-    'disable_existing_loggers' : False,
-    'filters' : {
-        'require_debug_false' : {
-            '()' : 'django.utils.log.RequireDebugFalse',
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
         },
-        'require_debug_true' : {
-            '()' : 'django.utils.log.RequireDebugTrue',
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
         },
     },
-    'formatters' : {
-        'django.server' : {
-            '()' : 'django.utils.log.ServerFormatter',
-            'format' : '[{server_time}]{message}',
+    'formatters': {
+        'django.server': {
+            '()': 'django.utils.log.ServerFormatter',
+            'format': '[{server_time}] {message}',
             'style': '{',
         },
         'standard': {
             'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
-            #asctime=현재시간, levelname=로그레벨, name=로그명, message=출력내용
         },
     },
-    'handlers':{
-        'console' : {
+    'handlers': {
+        'console': {
             'level': 'INFO',
             'filters': ['require_debug_true'],
             'class': 'logging.StreamHandler',
-            'file': {
-                'level': 'INFO', #출력레벨로 INFO 사용
-                'filters': ['require_debug_false'], #DEBUG=False 환경
-                'class': 'logging.handlers.RotatingFileHandler', #파일 핸들러로 RotatingFileHandler 사용
-                'filename': BASE_DIR / 'logs/mysite.log', #로그 파일명은 mysite.log
-                'maxBytes': 1024*1024*5, #5MB #로그 파일 크기
-                'backupCount': 5, #롤링되는 파일의 개수
-                'formatter': 'standard', #포맷터는 standard
-            },
     },
-    'django.server':{
-        'level': 'INFO',
-        'filters': ['require_debug_true'],
-        'class': 'logging.StreamHandler',
+    'django.server': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'django.server',
     },
     'mail_admins': {
-        'level': 'ERROR',
-        'filters': ['require_debug_false'],
-        'class': 'django.utils.log.AdminEmailHandler'
-    }
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler'
+    },
+    'file': {
+            'level': 'INFO', #출력레벨로 INFO 사용
+            'filters': ['require_debug_false'], #DEBUG=False 환경
+            'class': 'logging.handlers.RotatingFileHandler', #파일 핸들러로 RotatingFileHandler 사용
+            'filename': BASE_DIR / 'logs/mysite.log', #로그 파일명은 mysite.log
+            'maxBytes': 1024*1024*5, #5MB #로그 파일 크기
+            'backupCount': 5, #롤링되는 파일의 개수
+            'formatter': 'standard', #포맷터는 standard
+        },
     },
     'loggers': {
         'django': {
-            'handlers': ['console','mail_admins','file'],
+            'handlers': ['console', 'mail_admins', 'file'],
             'level': 'INFO',
         },
-        'django.server':{
+        'django.server': {
             'handlers': ['django.server'],
             'level': 'INFO',
             'propagate': False,
+        },
+        'pybo': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
         },
     }
 }
